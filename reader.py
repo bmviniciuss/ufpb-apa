@@ -4,8 +4,8 @@ from parser import *
 
 def read_input_file(filename):
   base_dir = os.path.dirname(__file__)
-  instance_path = "instancias_teste/"
-  file_path = os.path.join(base_dir,  instance_path + filename)
+  file_path = os.path.join(base_dir, filename)
+  # file_path = os.path.join(base_dir,  instance_path + filename)
 
   # read file to memory
   lines = []

@@ -1,3 +1,5 @@
+from Node import Node
+
 def parse_info(lines):
   info = []
   for line in lines:
@@ -9,13 +11,13 @@ def parse_info(lines):
       info.append(int(value))
   return info
 
-def parse_demand(lines):
-  demands = []
+def parse_nodes(lines):
+  nodes = []
   for line in lines:
     [index, demand] = [a.strip() for a in line.split()]
-    demands.append(int(demand))
+    nodes.append(Node(index, int(demand)))
 
-  return demands
+  return nodes
 
 def parse_costs(lines):
   costs = []

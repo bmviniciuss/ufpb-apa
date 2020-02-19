@@ -1,4 +1,4 @@
-import sys,os
+import sys, os, time
 import argparse
 from utils import *
 from reader import *
@@ -21,10 +21,14 @@ def main():
   for file in files:
     name, dimension, capacity, nodes, costs = read_input_file(mypath + "/" + file)
     guloso = Guloso(nodes, costs, capacity, dimension)
+    start_time = time.time()
     guloso_cost = guloso.run()
+    end_time = time.time()
     print("Test:",file)
     print("# Guloso:", guloso_cost)
+    print("# Time: {:f} seconds".format(end_time - start_time) )
     print()
+
 
 
 

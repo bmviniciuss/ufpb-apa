@@ -15,13 +15,11 @@ class Guloso:
     return False
 
   def run(self):
-    # create first truck
     self.trucks.append(Truck(self.capacity))
 
     final_cost = 0
     visited_cost = 0
     current_truck = 0
-    remaing_client = self.dimension
 
     while self.has_non_visited_nodes():
       chosen_index = 0

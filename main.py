@@ -1,28 +1,31 @@
-import sys
+import sys,os
+import argparse
 from utils import *
 from reader import *
 from Guloso import Guloso
 
 def main():
-  args = sys.argv
-  if len(args) > 1 and ".txt" in args[1]:
-    filename = args[1]
-    name, dimension, capacity, nodes, costs = read_input_file(filename)
+  # Input Parser
+  parser = argparse.ArgumentParser(description='Process tests files')
+  parser.add_argument('-p', dest='path', help='Directory path for test files')
+  args = parser.parse_args()
+  mypath = args.path
 
-    if len(args) > 2 and args[2] in ["--debug", "-d"]:
-      print("entrou")
-      print("Input:", name)
-      print("Dimension:", dimension)
-      print("Capacity:", capacity)
-      print("\nDemand:")
-      print(demands)
+  files = []
+  for file in os.listdir(mypath):
+    if os.path.isfile(os.path.join(mypath, file)) and "txt" in file:
+      files.append(file)
+  
+  files.sort()
 
-      print("\nCosts:")
-      print_matrix(costs)
-
+  for file in files:
+    name, dimension, capacity, nodes, costs = read_input_file(mypath + "/" + file)
     guloso = Guloso(nodes, costs, capacity, dimension)
     guloso_cost = guloso.run()
-    print("Guloso:", guloso_cost)
+    print("Test:",file)
+    print("# Guloso:", guloso_cost)
+    print()
+
 
 
 

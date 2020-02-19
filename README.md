@@ -27,5 +27,5 @@ cd ufpb-apa
 - Rodar o script com uma instância
 
 ```bash
-python3 main.py instancias_teste/P-n16-k8.txt
+python3 main.py -p ./instancias_teste
 ```

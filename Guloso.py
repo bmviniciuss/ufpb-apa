@@ -20,8 +20,11 @@ class Guloso:
     final_cost = 0
     visited_cost = 0
     current_truck = 0
+    n_nodes = self.dimension - 1
 
-    while self.has_non_visited_nodes():
+    # while self.has_non_visited_nodes():
+    while n_nodes > 0:
+      
       chosen_index = 0
       chosen_node = None
       min_cost = inf
@@ -46,6 +49,7 @@ class Guloso:
         truck.current_location = int(chosen_node.id)
         self.nodes[chosen_index].visited = True
         final_cost += min_cost
+        n_nodes -= 1
       else:
         #changing truck
         if int(self.trucks[current_truck].current_location) != 0:

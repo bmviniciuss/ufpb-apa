@@ -24,7 +24,7 @@ git clone https://github.com/bmviniciuss/ufpb-apa
 cd ufpb-apa
 ```
 
-- Rodar o script com uma instância
+- Rodar o script selecionando o path para a pasta com as entradas
 
 ```bash
 python3 main.py -p ./instancias_teste

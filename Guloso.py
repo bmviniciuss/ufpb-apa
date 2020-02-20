@@ -22,7 +22,6 @@ class Guloso:
     current_truck = 0
     n_nodes = self.dimension - 1
 
-    # while self.has_non_visited_nodes():
     while n_nodes > 0:
       
       chosen_index = 0

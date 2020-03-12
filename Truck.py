@@ -28,6 +28,12 @@ class Truck:
   def path(self):
     return self._path
 
+  def get_path_ids(self):
+    aux = []
+    for node in self._path:
+      aux.append(node.id)
+    return aux
+
   @current_location.setter
   def current_location(self,location):
     self._current_location = location

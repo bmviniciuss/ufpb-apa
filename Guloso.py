@@ -23,15 +23,16 @@ class Guloso:
     n_nodes = self.dimension - 1
 
     while n_nodes > 0:
-      
       chosen_index = 0
       chosen_node = None
       min_cost = inf
 
+      # check if truck path is empty
       if len(self.trucks[current_truck].path) == 0:
         self.trucks[current_truck].add_to_path(self.nodes[0])
         self.nodes[0].visited = True
       
+      # run the greedy algorithm
       for i in range(self.dimension):
         if not self.nodes[i].visited:
           if self.trucks[current_truck].available_load() >= self.nodes[i].demand:
@@ -40,7 +41,12 @@ class Guloso:
               min_cost = visited_cost
               chosen_index = i
               chosen_node = self.nodes[i]
-      
+
+      # if current_truck == 7:
+        # print("NO",chosen_node)
+        # print("NODES:", n_nodes)
+
+      # if we can choose a node
       if chosen_node != None:
         truck = self.trucks[current_truck]
         truck.add_to_path(chosen_node)
@@ -50,13 +56,28 @@ class Guloso:
         final_cost += min_cost
         n_nodes -= 1
       else:
-        #changing truck
+        # Changing truck
+        
         if int(self.trucks[current_truck].current_location) != 0:
           final_cost += self.cost_matrix[self.trucks[current_truck].current_location][0]
           self.trucks[current_truck].add_to_path(self.nodes[0])
-        
+
         self.trucks.append(Truck(self.capacity))
         current_truck += 1
-    return final_cost
+
+    # taker last truck to the depot
+    final_cost += self.cost_matrix[self.trucks[current_truck].current_location][0]
+    self.trucks[current_truck].add_to_path(self.nodes[0])
+
+    routes = []
+
+    i = 0
+    for truck in self.trucks:
+      # print("Truck:", i)
+      # print(truck.get_path_ids())
+      routes.append(truck.get_path_ids())
+      i+=1
+
+    return final_cost, routes
 
 

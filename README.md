@@ -27,5 +27,39 @@ cd ufpb-apa
 - Rodar o script selecionando o path para a pasta com as entradas
 
 ```bash
-python3 main.py -p ./instancias_teste
+python3 main.py -f instancias_teste/P-n50-k10.txt
 ```
+
+- Se quiser escrever um arquivo de output do teste adicione a flag `-o`
+
+```bash
+python3 main.py -f instancias_teste/P-n50-k10.txt -o
+```
+
+# Otimizações
+
+## Reinsertion
+
+### Original
+
+`[ 0, 2, 4, 5, 7, 0]`
+
+### Teste
+
+`[ 0, 4, 5, 2, 7, 0]`
+
+### index
+
+`(i, k) = (1, 3)`
+
+### Quebradas
+
+- 0 -> 2 : `M[R[i-1]][R[i]]`
+- 2 -> 4 : `M[R[i]][R[i + 1]]`
+- 5 -> 7 : `M[R[k]][R[K + 1]]`
+
+### Ligadas
+
+- 0 -> 4 : `M[R[i - 1]][R[i + 1]]`
+- 5 -> 2 : `M[R[k]][R[i]]`
+- 2 -> 7 : `M[R[i]][R[k+1]]`

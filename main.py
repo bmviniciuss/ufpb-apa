@@ -4,7 +4,7 @@ from utils import *
 from reader import *
 from Guloso import Guloso
 from datetime import datetime
-from optimizations import reinsertion
+from optimizations import reinsertion,swap
 
 def main():
   # Input Parser+
@@ -31,10 +31,14 @@ def main():
   guloso_cost, routes = guloso.run()
 
   reinsertion_cost = reinsertion(routes, costs,guloso_cost)
+  swap_cost = swap(routes, costs,guloso_cost)
+
 
   print("Test:",file_path)
   print("# Guloso:", guloso_cost)
   print("# Reinsertion:", reinsertion_cost)
+  print("# Swap:", swap_cost)
+
   print()
 
   if to_output:

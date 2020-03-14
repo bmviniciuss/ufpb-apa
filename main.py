@@ -4,7 +4,7 @@ from utils import *
 from reader import *
 from Guloso import Guloso
 from datetime import datetime
-from optimizations import reinsertion,swap
+from optimizations import reinsertion,swap, two_opt
 
 def main():
   # Input Parser+
@@ -32,12 +32,16 @@ def main():
 
   reinsertion_cost = reinsertion(routes, costs,guloso_cost)
   swap_cost = swap(routes, costs,guloso_cost)
+  two_opt_cost = two_opt(routes, costs,guloso_cost)
+
 
 
   print("Test:",file_path)
   print("# Guloso:", guloso_cost)
   print("# Reinsertion:", reinsertion_cost)
   print("# Swap:", swap_cost)
+  print("# Two-Opt:", two_opt_cost)
+
 
   print()
 

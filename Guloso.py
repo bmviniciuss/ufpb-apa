@@ -1,7 +1,6 @@
-import random
 from Truck import Truck
 from math import inf
-
+from random import choice
 
 class Guloso:
   def __init__(self, nodes, cost_matrix, capacity, dimension):
@@ -34,27 +33,34 @@ class Guloso:
       if len(self.trucks[current_truck].path) == 0:
         self.trucks[current_truck].add_to_path(self.nodes[0])
         self.nodes[0].visited = True
+        if current_truck == 0:
+          random_node = None
+          while True:
+            random_node = choice(self.nodes)
+            if self.trucks[current_truck].available_load() >= random_node.demand:
+              break
+
+          random_node = choice(self.nodes)
+          truck = self.trucks[current_truck]
+          prev_location = truck.path[0]
+          truck.add_to_path(random_node)
+          truck.add_load(random_node.demand)
+          truck.current_location = int(random_node.id)
+          self.nodes[random_node.id].visited = True
+          final_cost += self.cost_matrix[prev_location.id][self.trucks[current_truck].current_location]
+          n_nodes -= 1
+
       
       # run the greedy algorithm
-      options = []
-      OPTIONS_MAX = 5
       for i in range(self.dimension):
         if not self.nodes[i].visited:
           if self.trucks[current_truck].available_load() >= self.nodes[i].demand:
             visited_cost = self.cost_matrix[self.trucks[current_truck].current_location][i]
-
-
             if visited_cost < min_cost:
-              if len(options) == OPTIONS_MAX:
-                break
-              if len(options) < OPTIONS_MAX:
-                options.append(self.nodes[i])
-              
-      # random node
-      if len(options) > 0:
-        chosen_node = random.choice(options)
-        # print(chosen_node)
-        options = []
+              min_cost = visited_cost
+              chosen_index = i
+              chosen_node = self.nodes[i]
+
 
       # if we can choose a node
       if chosen_node != None:
@@ -62,11 +68,12 @@ class Guloso:
         truck.add_to_path(chosen_node)
         truck.add_load(chosen_node.demand)
         truck.current_location = int(chosen_node.id)
-        chosen_node.visited = True
-        final_cost += self.cost_matrix[self.trucks[current_truck].current_location][chosen_node.id]
+        self.nodes[chosen_index].visited = True
+        final_cost += min_cost
         n_nodes -= 1
       else:
         # Changing truck
+        
         if int(self.trucks[current_truck].current_location) != 0:
           final_cost += self.cost_matrix[self.trucks[current_truck].current_location][0]
           self.trucks[current_truck].add_to_path(self.nodes[0])
@@ -82,11 +89,10 @@ class Guloso:
 
     i = 0
     for truck in self.trucks:
-      # print("Truck:", i)
-      # print(truck.get_path_ids())
+      print("Truck:", i)
+      print(truck.get_path_ids())
       routes.append(truck.get_path_ids())
       i+=1
 
     return final_cost, routes
-
 

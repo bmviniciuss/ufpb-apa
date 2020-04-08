@@ -94,13 +94,5 @@ class Guloso:
       routes.append(truck.get_path_ids())
       i+=1
 
-    i = 0
-
-    if final_cost == 283:
-      for truck in self.trucks:
-        print("Truck:", i)
-        print(truck.get_path_ids())
-        i+=1
-
     return final_cost, routes
 

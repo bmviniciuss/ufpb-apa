@@ -6,6 +6,7 @@ from Guloso import Guloso
 from datetime import datetime
 from optimizations import reinsertion, swap, two_opt
 import copy 
+import time
 
 from VND import VND
 
@@ -20,23 +21,59 @@ def main():
   to_output = args.output
 
   # Run
-  name, dimension, capacity, nodes, costs = read_input_file(file_path)
-  guloso = Guloso(nodes, costs, capacity, dimension)
-  guloso_cost, routes = guloso.run()
 
-  reinsertion_cost, reinsertion_routes = reinsertion(copy.deepcopy(routes), copy.deepcopy(costs),copy.deepcopy(guloso_cost))
-  swap_cost, swap_routes = swap(copy.deepcopy(routes), copy.deepcopy(costs),copy.deepcopy(guloso_cost))
+  ROUNDS = 10
+  vmp_costs = []
+  vmp_execution_time = []
 
-  two_opt_cost, two_opt_routes = two_opt(copy.deepcopy(routes), costs,copy.deepcopy(guloso_cost))
-  vnd_cost, vnd_routes = VND(copy.deepcopy(routes), copy.deepcopy(costs), copy.deepcopy(guloso_cost))
+  vnd_costs = []
+  vnd_execution_time = []
 
-  print("Test:",file_path)
-  print("# VMP:", guloso_cost)
-  print("# Reinsertion:", reinsertion_cost)
-  print("# Swap:", swap_cost)
-  print("# Two-Opt:", two_opt_cost)
-  print("# VND:", vnd_cost)
-  print()
+  print("File: {} ".format(file_path))
+  print("{} Rounds\n".format(ROUNDS))
+
+  for i in range(ROUNDS):
+    name, dimension, capacity, nodes, costs = read_input_file(file_path)
+    guloso = Guloso(copy.deepcopy(nodes), copy.deepcopy(costs), copy.deepcopy(capacity), copy.deepcopy(dimension))
+
+    vmp_start = time.time()
+    guloso_cost, routes = guloso.run()
+    vmp_end = time.time()
+    vmp_duration = vmp_end - vmp_start
+    vmp_execution_time.append(vmp_duration)
+    vmp_costs.append(guloso_cost)
+
+    vnd_start = time.time()
+    vnd_cost, vnd_routes = VND(copy.deepcopy(routes), copy.deepcopy(costs), copy.deepcopy(guloso_cost))
+    vnd_end = time.time()
+    vnd_duration = vnd_end - vnd_start
+    vnd_execution_time.append(vnd_duration)
+    vnd_costs.append(vnd_cost)
+    # print("#{}".format(i))
+    # print("VMP - Cost:{} - Duration: {:.6f}".format(guloso_cost, vmp_duration))
+    # print("VND - Cost:{} - Duration: {:.6f}".format(vnd_cost, vnd_duration))
+  
+  # VMP stats
+  vmp_avg_cost = sum(vmp_costs)/len(vmp_costs)
+  vmp_best_cost = min(vmp_costs)
+  vmp_avg_execution_time = sum(vmp_execution_time)/len(vmp_execution_time)
+
+  # VND stats
+  vnd_avg_cost = sum(vnd_costs)/len(vnd_costs)
+  vnd_best_cost = min(vnd_costs)
+  vnd_avg_execution_time = sum(vnd_execution_time)/len(vnd_execution_time)
+
+  print("VMP - Avg Cost: {}".format(vmp_avg_cost))
+  print("VMP - Best Cost: {}".format(vmp_best_cost))
+  print("VMP - Avg Execution Time: {:.6f} seconds".format(vmp_avg_execution_time))
+
+  print("VND - Avg Cost: {}".format(vnd_avg_cost))
+  print("VND - Best Cost: {}".format(vnd_best_cost))
+  print("VND - Avg Execution Time: {:.6f} seconds".format(vnd_avg_execution_time))
+
+
+
+
 
   if to_output:
     write_to_file(file_path, guloso_cost, reinsertion_cost)
